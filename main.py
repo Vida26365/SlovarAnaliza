@@ -4,14 +4,16 @@ from pridobivanje_podatkov import *
 def main(downlovdaj=True, pocsvjaj=True):
     #spremenljivke____________________________________________________
     mapa = "podatki"
-    html = "html.html"
+    html = lambda n: f"html{n}.html" #razdelim html na več datotek, da ne bi preveč v eni datoteki. Nisem sicer preverila, ampak sklepam da bi lahko bilo preveč
     csv = "csv.csv"
-    url = "https://www.fran.si/iskanje?View=1&Query=*&All=*&FilteredDictionaryIds=133"
+
+    url = lambda n: f"https://www.fran.si/iskanje?page={n}&View=1&Query=*&All=*&FilteredDictionaryIds=133" 
 
     
-    pot = os.path.join(mapa, html)
+    pot = os.path.join(mapa, html(1))
     if downlovdaj or not os.path.exists(pot):
-        url_to_file(url, mapa, html)
+        for i in range(1, 4884):
+            url_to_file(url(i), mapa, html(i))
     else:
         print("Datoteka html že obstaja")
     
