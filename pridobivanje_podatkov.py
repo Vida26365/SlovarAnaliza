@@ -54,3 +54,13 @@ def regexanje(tekst): #se bom potem ukvarjala s tem. to je kr neki______________
 
 
 
+def vse_stgrani_to_html(od, do, url_func):
+    zač = time.time()
+    for i in range(od, do+1):
+        url_to_file(url(i), mapa, html)
+        print("stran", i)
+        
+    t1 = time.time()-zač
+    print(do-od+1, t1)
+
+
