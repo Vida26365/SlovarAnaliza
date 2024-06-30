@@ -14,7 +14,7 @@ def url_to_file(url, mapa, file):
     
     os.makedirs(mapa, exist_ok=True)
     pot = os.path.join(mapa, file)
-    with open(pot, "w", encoding="utf-8") as file:
+    with open(pot, "a", encoding="utf-8") as file:
         file.write(tekst)
     return
 
