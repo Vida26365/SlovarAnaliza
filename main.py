@@ -25,16 +25,18 @@ def main(downlovdaj=True, pocsvjaj=True):
         t1 = vse_strani_to_html(od, do, url, mapa_slovar, html)
     else:
         print("Datoteka html že obstaja")
+        t1 = None
     
     pot = os.path.join(mapa_slovar, csv)
     if pocsvjaj or not os.path.exists(pot):
         t2 = html_to_csv(mapa_slovar, html, csv)
     else:
         print("datoteka csv že obstaja")
+        t2 = None
     
-    podatki_to_csv(mapa_hitrosti, file_hitrosti, od, do, t1=None, t2=None)
+    podatki_to_csv(mapa_hitrosti, file_hitrosti, od, do, t1, t2)
     
     
 if __name__ == '__main__':
-    main()
+    main(True, True)
 
