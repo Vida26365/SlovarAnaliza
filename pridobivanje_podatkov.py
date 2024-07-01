@@ -2,6 +2,8 @@ import requests
 import re
 import os
 import csv
+import time
+import speedtest
 
 def url_to_file(url, mapa, file):
     try:
@@ -24,11 +26,11 @@ def file_to_string(mapa, file):
         text = file.read()
     return text
 
-def dict_to_csv(slovar, mapa, file):
+def dict_to_csv(slovar, mapa, file, način):
     os.makedirs(mapa, exist_ok=True)
     pot = os.path.join(mapa, file)
     oznake = list(slovar[0].keys())
-    with open(pot, "w", encoding="utf-8") as file:
+    with open(pot, način, encoding="utf-8") as file:
         pisatelj = csv.DictWriter(file, fieldnames=oznake)
         pisatelj.writeheader()
         for stvar in slovar:
@@ -54,13 +56,36 @@ def regexanje(tekst): #se bom potem ukvarjala s tem. to je kr neki______________
 
 
 
-def vse_stgrani_to_html(od, do, url_func):
+def vse_strani_to_html(od, do, url, mapa, file): #url je funkcija
     zač = time.time()
     for i in range(od, do+1):
-        url_to_file(url(i), mapa, html)
+        url_to_file(url(i), mapa, file)
         print("stran", i)
         
     t1 = time.time()-zač
-    print(do-od+1, t1)
+    # print(do-od+1, t1)
+    return t1
+    
+def html_to_csv(mapa, html, csv):
+    zač = time.time()
+    print("v procesu pridobivanja posatkov")
+    tekst = file_to_string(mapa, html)
+    dict_to_csv(regexanje(tekst), mapa, csv, "w")
+    
+    t2 = time.time()-zač
+    return t2
 
+def get_internet_speed():
+    return speedtest.Speedtest().download()
+
+def podatki_to_dict(hitrost, t1, t2, od, do):
+    št = do-od+1
+    čas = t1+t2
+    return {"internetna_hitrost":hitrost, "čas_html":t1, "čas_csv":t2, "strani": št}
+
+def podatki_to_csv(hitrost, t1, t2, od, do, mapa, file):
+    t = time.time()
+    slovar = podatki_to_dict(hitrost, t1, t2, od, do)
+    dict_to_csv(slovar, mapa, file, "a")
+    print(time.time()-t)
 
