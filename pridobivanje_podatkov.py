@@ -3,14 +3,14 @@ import re
 import os
 import csv
 import time
+import pandas as pd
 
-
-print("to ni main, napačen file si pognala")
+# print("to ni main, napačen file si pognala")
 
 # to_funkcije___________________________________________________________________________________________________
 
 # html_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-
-def url_to_file(url, nadmapa, mapa, file):
+def url_to_file(url,  mapa, file):
     try:
         headers = {"User-agent":"Chrome/124.0.6367.207"}
         vsebina = requests.get(url, headers=headers)
@@ -19,42 +19,42 @@ def url_to_file(url, nadmapa, mapa, file):
         return None
     tekst = vsebina.text
     
-    pot_map = os.path.join(nadmapa, mapa)
-    os.makedirs(pot_map, exist_ok=True)
-    pot = os.path.join(nadmapa, mapa, file)
+    
+    os.makedirs(mapa, exist_ok=True)
+    pot = os.path.join( mapa, file)
     with open(pot, "a", encoding="utf-8") as file:
         file.write(tekst)
     return
 
-def file_to_string(nadmapa, mapa, file):
-    pot = os.path.join(nadmapa, mapa, file)
+def file_to_string( mapa, file):
+    pot = os.path.join( mapa, file)
     with open(pot, "r", encoding="utf-8") as file:
         text = file.read()
     return text
 
-def vse_strani_to_html(od, do, url,nadmapa, mapa, file): #url je funkcija
+def vse_strani_to_html(od, do, url, mapa, file): #url je funkcija
     zač = time.time()
     for i in range(od, do+1):
         print("stran", i)
-        url_to_file(url(i),nadmapa, mapa, file)
+        url_to_file(url(i), mapa, file)
     return time.time()-zač
 
 # csv_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
-def html_to_csv(nadmapa, mapa, html, csv):
+def html_to_csv( mapa, html, csv):
     zač = time.time()
     print("v procesu pridobivanja posatkov iz htmlja v csv")
-    tekst = file_to_string(nadmapa, mapa, html)
-    dict_to_csv(regexanje(tekst),nadmapa, mapa, csv, "w")
+    tekst = file_to_string( mapa, html)
+    dict_to_csv(regexanje(tekst), mapa, csv, "w")
     return time.time()-zač
 
 
-def dict_to_csv(slovar, nadmapa, mapa, file, način, naslov=True):
-    pot = os.path.join(nadmapa, mapa, file)
+def dict_to_csv(slovar,  mapa, file, način, naslov=True):
+    pot = os.path.join( mapa, file)
     if not os.path.exists(pot):
         naslov = True
     
-    pot_map = os.path.join(nadmapa, mapa)
-    os.makedirs(pot_map, exist_ok=True)
+    
+    os.makedirs(mapa, exist_ok=True)
     oznake = list(slovar[0].keys())
     with open(pot, način, encoding="utf-8") as file:
         pisatelj = csv.DictWriter(file, fieldnames=oznake)
@@ -72,11 +72,11 @@ def podatki_to_dict(t1, t2, od, do):
     csv_hitrost = št/t2
     return [{"čas_html":t1, "čas_csv":t2, "strani": št, "html_hitrost":html_hitrost, "csv_hitrost":csv_hitrost}]
 
-def podatki_to_csv(nadmapa, mapa, file, od, do, t1=None, t2= None):
+def podatki_to_csv( mapa, file, od, do, t1=None, t2= None):
     # t = time.time()
     # hitrost = get_internet_speed()
     slovar = podatki_to_dict(t1, t2, od, do)
-    dict_to_csv(slovar, nadmapa, mapa, file, "a", naslov=False)
+    dict_to_csv(slovar,  mapa, file, "a", naslov=False)
     # print(time.time()-t)
 
 
@@ -92,3 +92,9 @@ def regexanje(tekst):
     vzorec = ".*?".join((re_ime, re_oblika, re_vrsta, re_tonemski_naglas))
     
     return [m.groupdict() for m in re.finditer(vzorec, tekst, re.DOTALL)]
+
+
+
+
+# analiza_in_prikaz__________________________________________________________________________________________________
+
