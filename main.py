@@ -1,19 +1,23 @@
 from pridobivanje_podatkov import *
+import time
 
 
 def main(downlovdaj=True, pocsvjaj=True):
     #spremenljivke____________________________________________________
     mapa_slovar = "slovarski_podatki"
-    html = "html.html" #razdelim html na več datotek, da ne bi preveč v eni datoteki. Nisem sicer preverila, ampak sklepam da bi lahko bilo preveč
+    html = "html.html"
     csv = "csv.csv"
     
-    mapa_hitrosti = "programski_podatki"
+    mapa_hitrosti = "programski_podatki" #posebna mapa, ker se ta ne briše
     file_hitrosti = "podatki.csv"
 
     url = lambda n: f"https://www.fran.si/iskanje?page={n}&View=1&Query=*&All=*&FilteredDictionaryIds=133" 
     
     od = 1
     do = 3 #vključno z    (do 4884)
+    
+    
+    
 
     
     pot = os.path.join(mapa_slovar, html)
@@ -28,9 +32,9 @@ def main(downlovdaj=True, pocsvjaj=True):
     else:
         print("datoteka csv že obstaja")
     
-    podatki_to_csv(get_internet_speed(), t1, t2, od, do, mapa_hitrosti, file_hitrosti)
+    podatki_to_csv(mapa_hitrosti, file_hitrosti, od, do, t1=None, t2=None)
     
     
 if __name__ == '__main__':
-    main(True)
+    main()
 
