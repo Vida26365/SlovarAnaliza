@@ -10,7 +10,6 @@ def main(downlovdaj=True, pocsvjaj=True):
     do = 30 #vključno z    (do 4884)
     
     #nespremenljive_spremenljivke_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
-    #nadmapa = "podatki"
     mapa_slovar = "slovar"
     html = "html.html"
     csv = "besede.csv"
