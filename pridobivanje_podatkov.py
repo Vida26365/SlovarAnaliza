@@ -34,6 +34,7 @@ def file_to_string( mapa, file):
 
 def vse_strani_to_html(od, do, url, mapa, file): #url je funkcija
     zač = time.time()
+    print("v procesu pridobivanja html-ja")
     for i in range(od, do+1):
         print("stran", i)
         url_to_file(url(i), mapa, file)
@@ -73,11 +74,8 @@ def podatki_to_dict(t1, t2, od, do):
     return [{"čas_html":t1, "čas_csv":t2, "strani": št, "html_hitrost":html_hitrost, "csv_hitrost":csv_hitrost}]
 
 def podatki_to_csv( mapa, file, od, do, t1=None, t2= None):
-    # t = time.time()
-    # hitrost = get_internet_speed()
     slovar = podatki_to_dict(t1, t2, od, do)
     dict_to_csv(slovar,  mapa, file, "a", naslov=False)
-    # print(time.time()-t)
 
 
 # pridobi_type_funkcije_____________________________________________________________________________________________
@@ -86,7 +84,7 @@ def regexanje(tekst):
     #stvari_ki_jih_iščem:
     re_ime = r'<span class="font_xlarge"><a href.*?>(?P<ime>.+?)</a>'
     re_oblika = r'title="Oblika" data-group="header">(?P<oblika>.*?)</span>'
-    re_vrsta = r'<span data-group="header qualifier"><span class="color_lightdark font_small" data-toggle="tooltip" data-placement="top" title=.*?>(?P<vrsta>ž|m|s|medm.|predl.|predpona|člen.|dov.|nedov.|prid.|prisl)</span>'
+    re_vrsta = r'<span data-group="header qualifier"><span class="color_lightdark font_small" data-toggle="tooltip" data-placement="top" title="(?P<vrsta>samostalnik ženskega spola|samostalnik moškega spola|samostalnik srednjega spola|medemet|predlog|predpona|členek|dovršni glagol|nedovršni glagol|dovršni in nedovršni glagol|pridevnik|prislov)"'
     re_tonemski_naglas = r'title="Tonemski naglas" data-group="header">(?P<tonemski_naglas>.*?)</span>'
     
     vzorec = ".*?".join((re_ime, re_oblika, re_vrsta, re_tonemski_naglas))
