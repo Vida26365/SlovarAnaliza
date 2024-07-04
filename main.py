@@ -3,7 +3,11 @@ import time
 from spremenljivke import *
 
 
-def main(downlovdaj=True, pocsvjaj=True):
+def main(downlovdaj=True, pocsvjaj=True, od = prva_stran, do=zadnja_stran):
+    if do > 4884:
+        do = 4884
+    if od < 1:
+        od = 1
     #pridobivanje_podatkov____________________________________________________________________________________________________
 
     #html_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
@@ -24,12 +28,10 @@ def main(downlovdaj=True, pocsvjaj=True):
     
     #ostali podatki_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
     podatki_to_csv( mapa_hitrosti, file_hitrosti, od, do, t1, t2)
-    
-    #prikaz_in_analiza__________________________________________________________________________________________
-    
 
+    print("končano")
 
 #klicanje main__________________________________________________________________________________________________
 if __name__ == '__main__':
-    main(True, True)
+    main(True, True, prva_stran, zadnja_stran)
 
