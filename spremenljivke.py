@@ -2,7 +2,7 @@ import pandas as pd
 import os
 #spremenljive_spremenljivke_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
 prva_stran = 1
-zadnja_stran = 100 #vključno z    (do 4884)
+zadnja_stran = 10 #vključno z    (do 4884)
 
 #nespremenljive_spremenljivke_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
 mapa_slovar = "slovar"
