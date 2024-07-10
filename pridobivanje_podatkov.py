@@ -1,3 +1,4 @@
+from bs4 import BeautifulSoup
 import requests
 import re
 import os
@@ -82,32 +83,94 @@ def podatki_to_csv( mapa, file, od, do, t1=None, t2= None):
 
 
 # pridobi_type_funkcije_____________________________________________________________________________________________
-
 def regexanje(tekst):
-    #<span class="font_xlarge"><a href="/133/sskj2-slovar-slovenskega-knjiznega-jezika-2/4457252/a?View=1&amp;Query=*&amp;All=*&amp;FilteredDictionaryIds=133">a</a></span><span class="color_lightdark font_xsmal sup">5</span> <span data-group="header">
-    # <span data-group="header qualifier"><span class="color_lightdark font_small" data-toggle="tooltip" data-placement="top" title="veznik" data-group="header qualifier">vez.</span></span>, <span class="color_lightdark font_small" data-toggle="tooltip" data-placement="top" title="knjižno" data-group="qualifier header ">knjiž. </span></span><br /><span class="color_lightdark strong">1. </span><span class="color_lightdark font_small" data-toggle="tooltip" data-placement="top" title="Kvalifikator, pojasnilo" data-group="qualifier header ">v protivnem priredju </span><span class="color_dark italic" data-toggle="tooltip" data-placement="top" title="Razlaga" data-group="explanation ">za izražanje</span><br /><span class="color_lightdark strong">a) </span><span class="color_dark italic" data-toggle="tooltip" data-placement="top" title="Razlaga" data-group="explanation ">nasprotja s prej povedanim; </span><span class="color_dark italic" data-toggle="tooltip" data-placement="top" title="Sopomenka" data-group="explanation"><a class="reference" href="/133/sskj2-slovar-slovenskega-knjiznega-jezika-2/4508133/pa?View=1&amp;Query=*&amp;All=*&amp;FilteredDictionaryIds=133" target="_blank">pa</a></span><span class="sup italic" data-group="other">2</span>, <span class="color_dark italic" data-toggle="tooltip" data-placement="top" title="Sopomenka" data-group="explanation"><a class="reference" href="/133/sskj2-slovar-slovenskega-knjiznega-jezika-2/4540453/toda?View=1&amp;Query=*&amp;All=*&amp;FilteredDictionaryIds=133" target="_blank">toda</a>, </span><span class="color_dark italic" data-toggle="tooltip" data-placement="top" title="Sopomenka" data-group="explanation"><a class="reference" href="/133/sskj2-slovar-slovenskega-knjiznega-jezika-2/4545439/vendar?View=1&amp;Query=*&amp;All=*&amp;FilteredDictionaryIds=133" target="_blank">vendar</a>:</span> <span data-group=""><span class="color_lightdark" data-toggle="tooltip" data-placement="top" title="Zgled" data-group="example">prej so ga radi imeli, a zdaj zabavljajo čezenj</span></span>; <span data-group=""><span class="color_lightdark" data-toggle="tooltip" data-placement="top" title="Zgled" data-group="example">to so besede, a ne dejanja</span></span>; <span data-group=""><span class="color_lightdark" data-toggle="tooltip" data-placement="top" title="Zgled" data-group="example">drugod umetnike slavijo. A pri nas? sicer je miren, a kadar se napije, zdivja</span></span><span class="color_lightdark" data-group="other"> / <span data-group=""><span class="color_lightdark font_small" data-toggle="tooltip" data-placement="top" title="Kvalifikator, pojasnilo" data-group="qualifier header ">včasih okrepljen </span><span class="color_lightdark" data-toggle="tooltip" data-placement="top" title="Zgled" data-group="example">bilo ji je malo nerodno, a vendar tako lepo pri srcu </span></span></span><br /><span class="color_lightdark strong">b) </span><span class="color_dark italic" data-toggle="tooltip" data-placement="top" title="Razlaga" data-group="explanation ">nepričakovane posledice:</span> <span data-group=""><span class="color_lightdark" data-toggle="tooltip" data-placement="top" title="Zgled" data-group="example">tipal je po temni veži, a vrat ni našel</span></span>; <span data-group=""><span class="color_lightdark" data-toggle="tooltip" data-placement="top" title="Zgled" data-group="example">postarala se je, a ni ovenela </span></span><br /><span class="color_lightdark" data-toggle="tooltip" data-placement="top" title="Podpomen" data-group="other">// </span><span class="color_lightdark"><span class="color_dark italic" data-toggle="tooltip" data-placement="top" title="Razlaga" data-group="explanation ">za omejevanje:</span> <span data-group=""><span class="color_lightdark" data-toggle="tooltip" data-placement="top" title="Zgled" data-group="example">to more ugotoviti samo zdravnik, a še ta težko</span></span>; <span data-group=""><span class="color_lightdark" data-toggle="tooltip" data-placement="top" title="Zgled" data-group="example">bral je, a samo kriminalke </span></span></span><br /><span class="color_lightdark" data-toggle="tooltip" data-placement="top" title="Podpomen" data-group="other">// </span><span class="color_lightdark"><span class="color_lightdark font_small" data-toggle="tooltip" data-placement="top" title="Kvalifikator, pojasnilo" data-group="qualifier header ">na začetku novega (od)stavka </span><span class="color_dark italic" data-toggle="tooltip" data-placement="top" title="Razlaga" data-group="explanation ">za opozoritev na prehod k drugi misli:</span> <span data-group=""><span class="color_lightdark" data-toggle="tooltip" data-placement="top" title="Zgled" data-group="example">A vrnimo se k stvari! A dopustimo možnost, da se motimo </span></span></span><br /><span class="color_lightdark strong">2. </span><span class="color_lightdark font_small" data-toggle="tooltip" data-placement="top" title="Kvalifikator, pojasnilo" data-group="qualifier header ">v vezalnem priredju </span><span class="color_dark italic" data-toggle="tooltip" data-placement="top" title="Razlaga" data-group="explanation ">za navezovanje na prej povedano; </span><span class="color_dark italic" data-toggle="tooltip" data-placement="top" title="Sopomenka" data-group="explanation"><a class="reference" href="/133/sskj2-slovar-slovenskega-knjiznega-jezika-2/4479778/in?View=1&amp;Query=*&amp;All=*&amp;FilteredDictionaryIds=133" target="_blank">in</a>, </span><span class="color_dark italic" data-toggle="tooltip" data-placement="top" title="Sopomenka" data-group="explanation"><a class="reference" href="/133/sskj2-slovar-slovenskega-knjiznega-jezika-2/4508133/pa?View=1&amp;Query=*&amp;All=*&amp;FilteredDictionaryIds=133" target="_blank">pa</a></span><span class="sup italic" data-group="other">2</span>: <span data-group=""><span class="color_lightdark" data-toggle="tooltip" data-placement="top" title="Zgled" data-group="example">sin je šel z doma, a hči se je omožila v sosednjo vas</span></span><span class="color_lightdark" data-group="other"> / <span data-group=""><span class="color_lightdark" data-toggle="tooltip" data-placement="top" title="Zgled" data-group="example">nevesta se sramežljivo smehlja, a rdečica ji zaliva lice </span></span></span>
-
+    soup = BeautifulSoup(tekst, "html5lib")
+    # print(soup.prettify)
+    seznam = []
+    tabela = soup.find_all("div", attrs={"class":"entry-content"})
     
-    #<span class="font_xlarge"><a href="/133/sskj2-slovar-slovenskega-knjiznega-jezika-2/4457250/a?View=1&amp;Query=*&amp;All=*&amp;FilteredDictionaryIds=133">à</a></span><span class="color_lightdark font_xsmal sup">3</span> <span data-group="header">
-    # <span data-group="header qualifier"><span class="color_lightdark font_small" data-toggle="tooltip" data-placement="top" title="členek" data-group="header qualifier">člen.</span>
-
-    #stvari_ki_jih_iščem:
-    re_ime = r'<span class="font_xlarge"><a href.*?>(?P<ime>.+?)</a'
-    re_oblika = r'(?>title="Oblika" data-group="header">(?P<oblika>.+?)</span>.*?){0,1}'
-    re_vrsta = r'span data-group="header qualifier"><span class="color_lightdark font_small" data-toggle="tooltip" data-placement="top" title="(?P<vrsta>samostalnik ženskega spola|samostalnik moškega spola|samostalnik srednjega spola|medemet|predlog|predpona|členek|dovršni glagol|nedovršni glagol|dovršni in nedovršni glagol|pridevnik|prislov|zaimek|števnik)"'
-    re_tonemski_naglas = r'(?>title="Tonemski naglas" data-group="header">(?P<tonemski_naglas>.*?)</span>){0,1}<'
+    for odstavek in tabela:
+        slovar = {}
+        slovar["ime"] = odstavek.a.text
         
-    #stvari_ki_jih_iščem:
-    # re_ime = r'<span class="font_xlarge"><a href.*?>(?P<ime>.+?)</a>'
-    # re_oblika = r'title="Oblika" data-group="header">(?P<oblika>.*?)</span>'
-    # re_vrsta = r'(<span data-group="header qualifier"><span class="color_lightdark font_small" data-toggle="tooltip" data-placement="top" title="(?P<vrsta>samostalnik ženskega spola|samostalnik moškega spola|samostalnik srednjega spola|medemet|predlog|predpona|členek|dovršni glagol|nedovršni glagol|dovršni in nedovršni glagol|pridevnik|prislov|zaimek)"'
-    # re_tonemski_naglas = r'title="Tonemski naglas" data-group="header">(?P<tonemski_naglas>.*?)</span>'
+        listek = set()
+        for span in odstavek.find_all("span", attrs={"title":"Oblika"}):
+            
+            for c in odstavek.find("span", attrs={"title":"Oblika"}).text.replace(u"\xa0", u"").split():
+                listek.add(c)
+        slovar["oblika"] = listek
+        
+        def pomozna_definicija(tag):
+            vrste = ["samostalnik", "pridevnik", "glagol", "veznik", "členek", "prislov", "medmet"]
+            if not tag.has_attr("title"):
+                return False
+            for vrsta in vrste:
+                if vrsta in tag["title"]:
+                    return True
+            return False
+            # return tag.has_attr("title") and tag["title"] in ["samostalnik ženskega spola"]
+            # return tag["data-toggle"] == "tooltip" and tag["data-placement"] == "top" and tag["title"] not in ["Oblika"]
+        if odstavek.find(pomozna_definicija) != None:
+            print(odstavek.find(pomozna_definicija)["title"]) 
+            slovar["vrsta"] = odstavek.find(pomozna_definicija)["title"]
+        else:
+            print(odstavek)
+            slovar["vrsta"] = odstavek.find(pomozna_definicija)
+            if odstavek.find(attrs={"title":"Razlaga"}) != None and "pridevnik" in odstavek.find(attrs={"title":"Razlaga"}).text:
+                slovar["vrsta"] = "pridevnik"
+                print("zadetek____________________________________________")
+            # elif odstavek.find(attrs={"title":"Kazalka"}) != None and odstavek.find(attrs={"title":"Kazalka"}) == "gl. ":
+            #     slovar["vrsta"] = "glej "+odstavek.find(attrs={"title":"Oblika"})["title"]
+            #     print("dfvjdkrgsrhsrhsrthsrthrthrthrat")
+        print()
+        
+        
+        listek = set()
+        for span in odstavek.find_all(attrs={"title":"Izgovor"}):
+            listek.add(span.text)
+        slovar["izgovor"] = listek
+        
+        
+        
+        #<span class="color_lightdark font_small" data-toggle="tooltip" data-placement="top" title="samostalnik moškega spola" data-group="qualifier header ">m </span>
+        
+        #<span data-group="header"><span class="color_lightdark font_small" data-toggle="tooltip" data-placement="top" title="veznik, vezniška raba" data-group="qualifier header ">vez., </span>
+
+
+        
+        listek = set()
+        for span in odstavek.find_all(attrs={"title":"Tonemski naglas"}):
+            listek.add(span.text)
+        slovar["tonemski naglas"] = listek
+        
+
+        seznam.append(slovar)
     
-    vzorec = ".*?".join((re_ime, re_oblika, re_vrsta, re_tonemski_naglas))
+    #print(seznam, len(seznam))
+
+from spremenljivke import *
+regexanje(file_to_string(mapa_slovar, html))
+
+
+# def regexanje(tekst):
+
+#     #stvari_ki_jih_iščem:
+#     re_ime = r'<span class="font_xlarge"><a href.*?>(?P<ime>.+?)</a'
+#     re_oblika = r'(?>title="Oblika" data-group="header">(?P<oblika>.+?)</span>.*?){0,1}'
+#     re_vrsta = r'span data-group="header qualifier"><span class="color_lightdark font_small" data-toggle="tooltip" data-placement="top" title="(?P<vrsta>samostalnik ženskega spola|samostalnik moškega spola|samostalnik srednjega spola|medemet|predlog|predpona|členek|dovršni glagol|nedovršni glagol|dovršni in nedovršni glagol|pridevnik|prislov|zaimek|števnik)"'
+#     re_tonemski_naglas = r'(?>title="Tonemski naglas" data-group="header">(?P<tonemski_naglas>.*?)</span>){0,1}<'
+        
+#     #stvari_ki_jih_iščem:
+#     # re_ime = r'<span class="font_xlarge"><a href.*?>(?P<ime>.+?)</a>'
+#     # re_oblika = r'title="Oblika" data-group="header">(?P<oblika>.*?)</span>'
+#     # re_vrsta = r'(<span data-group="header qualifier"><span class="color_lightdark font_small" data-toggle="tooltip" data-placement="top" title="(?P<vrsta>samostalnik ženskega spola|samostalnik moškega spola|samostalnik srednjega spola|medemet|predlog|predpona|členek|dovršni glagol|nedovršni glagol|dovršni in nedovršni glagol|pridevnik|prislov|zaimek)"'
+#     # re_tonemski_naglas = r'title="Tonemski naglas" data-group="header">(?P<tonemski_naglas>.*?)</span>'
     
-    print(re.findall(vzorec, tekst, re.DOTALL))
+#     vzorec = ".*?".join((re_ime, re_oblika, re_vrsta, re_tonemski_naglas))
     
-    return [m.groupdict() for m in re.finditer(vzorec, tekst, re.DOTALL)]
+#     print(re.findall(vzorec, tekst, re.DOTALL))
+    
+#     return [m.groupdict() for m in re.finditer(vzorec, tekst, re.DOTALL)]
 
 
 
