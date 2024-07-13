@@ -6,7 +6,6 @@ import csv
 import time
 import pandas as pd
 
-# print("to ni main, napačen file si pognala")
 
 # to_funkcije___________________________________________________________________________________________________
 
@@ -84,10 +83,10 @@ def podatki_to_csv( mapa, file, od, do, t1=None, t2= None):
 
 # pridobi_type_funkcije_____________________________________________________________________________________________
 def regexanje(tekst):
-    soup = BeautifulSoup(tekst, "html5lib")
-    # print(soup.prettify)
+    print("Regexanje...")
+    soup = BeautifulSoup(tekst, "html5lib") #poglej si kaj naredi "html5lib"
     seznam = []
-    tabela = soup.find_all("div", attrs={"class":"entry-content"})
+    tabela = soup.find_all("div", attrs={"class":"entry-content"}) #najde posamezen  
     
     for odstavek in tabela:
         slovar = {}
@@ -108,35 +107,19 @@ def regexanje(tekst):
                 if vrsta in tag["title"]:
                     return True
             return False
-            # return tag.has_attr("title") and tag["title"] in ["samostalnik ženskega spola"]
-            # return tag["data-toggle"] == "tooltip" and tag["data-placement"] == "top" and tag["title"] not in ["Oblika"]
+        
         if odstavek.find(pomozna_definicija) != None:
-            print(odstavek.find(pomozna_definicija)["title"]) 
             slovar["vrsta"] = odstavek.find(pomozna_definicija)["title"]
         else:
-            print(odstavek)
-            slovar["vrsta"] = odstavek.find(pomozna_definicija)
-            if odstavek.find(attrs={"title":"Razlaga"}) != None and "pridevnik" in odstavek.find(attrs={"title":"Razlaga"}).text:
+            if odstavek.find(attrs={"title":"Razlaga"}) != None and "pridevnik od" in odstavek.find(attrs={"title":"Razlaga"}).text:
                 slovar["vrsta"] = "pridevnik"
-                print("zadetek____________________________________________")
-            # elif odstavek.find(attrs={"title":"Kazalka"}) != None and odstavek.find(attrs={"title":"Kazalka"}) == "gl. ":
-            #     slovar["vrsta"] = "glej "+odstavek.find(attrs={"title":"Oblika"})["title"]
-            #     print("dfvjdkrgsrhsrhsrthsrthrthrthrat")
-        print()
-        
+            else:
+                slovar["vrsta"] = None
         
         listek = set()
         for span in odstavek.find_all(attrs={"title":"Izgovor"}):
             listek.add(span.text)
         slovar["izgovor"] = listek
-        
-        
-        
-        #<span class="color_lightdark font_small" data-toggle="tooltip" data-placement="top" title="samostalnik moškega spola" data-group="qualifier header ">m </span>
-        
-        #<span data-group="header"><span class="color_lightdark font_small" data-toggle="tooltip" data-placement="top" title="veznik, vezniška raba" data-group="qualifier header ">vez., </span>
-
-
         
         listek = set()
         for span in odstavek.find_all(attrs={"title":"Tonemski naglas"}):
@@ -146,33 +129,8 @@ def regexanje(tekst):
 
         seznam.append(slovar)
     
-    #print(seznam, len(seznam))
-
-from spremenljivke import *
-regexanje(file_to_string(mapa_slovar, html))
-
-
-# def regexanje(tekst):
-
-#     #stvari_ki_jih_iščem:
-#     re_ime = r'<span class="font_xlarge"><a href.*?>(?P<ime>.+?)</a'
-#     re_oblika = r'(?>title="Oblika" data-group="header">(?P<oblika>.+?)</span>.*?){0,1}'
-#     re_vrsta = r'span data-group="header qualifier"><span class="color_lightdark font_small" data-toggle="tooltip" data-placement="top" title="(?P<vrsta>samostalnik ženskega spola|samostalnik moškega spola|samostalnik srednjega spola|medemet|predlog|predpona|členek|dovršni glagol|nedovršni glagol|dovršni in nedovršni glagol|pridevnik|prislov|zaimek|števnik)"'
-#     re_tonemski_naglas = r'(?>title="Tonemski naglas" data-group="header">(?P<tonemski_naglas>.*?)</span>){0,1}<'
-        
-#     #stvari_ki_jih_iščem:
-#     # re_ime = r'<span class="font_xlarge"><a href.*?>(?P<ime>.+?)</a>'
-#     # re_oblika = r'title="Oblika" data-group="header">(?P<oblika>.*?)</span>'
-#     # re_vrsta = r'(<span data-group="header qualifier"><span class="color_lightdark font_small" data-toggle="tooltip" data-placement="top" title="(?P<vrsta>samostalnik ženskega spola|samostalnik moškega spola|samostalnik srednjega spola|medemet|predlog|predpona|členek|dovršni glagol|nedovršni glagol|dovršni in nedovršni glagol|pridevnik|prislov|zaimek)"'
-#     # re_tonemski_naglas = r'title="Tonemski naglas" data-group="header">(?P<tonemski_naglas>.*?)</span>'
-    
-#     vzorec = ".*?".join((re_ime, re_oblika, re_vrsta, re_tonemski_naglas))
-    
-#     print(re.findall(vzorec, tekst, re.DOTALL))
-    
-#     return [m.groupdict() for m in re.finditer(vzorec, tekst, re.DOTALL)]
+    print(seznam, len(seznam))
+    return seznam
 
 
 
-
-# analiza_in_prikaz__________________________________________________________________________________________________
