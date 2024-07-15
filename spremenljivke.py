@@ -23,3 +23,4 @@ pot_slovar_html = os.path.join(mapa_slovar, html)
 
 #dodatno________________________________________________________________________________________________________
 abeceda = "abcčdefghijklmnoprsštuvzž"
+besedne_vrste = ["samostalnik", "zaimek", "števnik", "pridevnik", "prislov", "glagol", "členek", "veznik", "medmet"]
