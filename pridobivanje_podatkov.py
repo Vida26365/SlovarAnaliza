@@ -20,10 +20,14 @@ def url_to_file(url,  mapa, file, način = "a"):
     tekst = vsebina.text
     
     os.makedirs(mapa, exist_ok=True)
-    pot = os.path.join( mapa, file)
-    with open(pot, način, encoding="utf-8") as file:
-        file.write(tekst)
-    return
+    pot = os.path.join(mapa, file)
+    try:
+        with open(pot, način, encoding="utf-8") as file:
+            file.write(tekst)
+    except PermissionError:
+        print("wop wop")
+        return [url]
+    return []
 
 def file_to_string(mapa, file):
     pot = os.path.join( mapa, file)
@@ -35,12 +39,16 @@ def vse_strani_to_html(od, do, url, mapa, file): #url je funkcija
     zač = time.time()#########################################################33
     print("v procesu pridobivanja html-ja...")
     
+    žalostni_list = []
     print("stran", od)
-    url_to_file(url(od), mapa, file, "w") #prva stran je posebna, ker mora prva stran začeti pisati datoteko od začetka, namesto dodajati, kot to delajo naslednje strani
+    žalostni_list += url_to_file(url(od), mapa, file, "w") #prva stran je posebna, ker mora prva stran začeti pisati datoteko od začetka, namesto dodajati, kot to delajo naslednje strani
     for i in range(od+1, do+1):
         način = "a"
         print("stran", i)
-        url_to_file(url(i), mapa, file, "a")
+        žalostni_list += url_to_file(url(i), mapa, file, "a")
+    print(žalostni_list)
+    while žalostni_list != []: #poskrbi da so vse strani shranjene v datoteki
+        url_to_file(žalostni_list[0], mapa, file, "w")
     return time.time()-zač################################################33
 
 # csv_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
@@ -50,6 +58,17 @@ def html_to_csv(mapa, html, csv):
     tekst = file_to_string(mapa, html)
     dict_to_csv(regexanje(tekst), mapa, csv, "w")
     return time.time()-zač ######################################3333
+
+def html_to_parquet(mapa, html, file):
+    zač = time.time()####################################
+    print("v procesu pridobivanja posatkov iz htmlja v parquet...")
+    tekst = file_to_string(mapa, html)
+    df = pd.DataFrame.from_dict(regexanje(tekst))
+    os.makedirs(mapa, exist_ok=True)
+    pot = os.path.join(mapa, file)
+    df.to_parquet(pot)
+    return time.time()-zač ######################################3333
+
 
 
 def dict_to_csv(slovar,  mapa, file, način="w", naslov=True): ##################################################
