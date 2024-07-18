@@ -1,6 +1,6 @@
 from bs4 import BeautifulSoup
 import requests
-# import re  #'#'#'##'#'#'#'#'#'#'#'#'#'##'#'#'#'#'#'#'#''##'#'#
+import re  #'#'#'##'#'#'#'#'#'#'#'#'#'##'#'#'#'#'#'#'#''##'#'#
 import os
 import csv
 import time ##############################################
@@ -102,7 +102,7 @@ def podatki_to_csv( mapa, file, od, do, t1=None, t2= None): ####################
 
 
 # pridobi_type_funkcije_____________________________________________________________________________________________
-def regexanje(tekst):
+def regexanje2(tekst):
     print("Regexanje...")
     soup = BeautifulSoup(tekst, "html5lib") #poglej si kaj naredi "html5lib"
     seznam = []
@@ -157,3 +157,14 @@ def regexanje(tekst):
 
 
 
+def regexanje(tekst):
+    
+    #stvari_ki_jih_iščem:
+    re_ime = r'<span class="font_xlarge"><a href.*?>(?P<ime>.+?)</a'
+    # re_oblika = r'(?>title="Oblika" data-group="header">(?P<oblika>.+?)</span>.*?){0,1}'
+    re_vrsta = r'span data-group="header qualifier"><span class="color_lightdark font_small" data-toggle="tooltip" data-placement="top" title="(?P<vrsta>samostalnik ženskega spola|samostalnik moškega spola|samostalnik srednjega spola|medemet|predlog|predpona|členek|dovršni glagol|nedovršni glagol|dovršni in nedovršni glagol|pridevnik|prislov|zaimek|števnik|veznik)"'
+    # re_tonemski_naglas = r'(?>title="Tonemski naglas" data-group="header">(?P<tonemski_naglas>.*?)</span>){0,1}<'
+
+    vzorec = ".*?".join((re_ime, re_vrsta))
+
+    return [m.groupdict() for m in re.finditer(vzorec, tekst, re.DOTALL)]
