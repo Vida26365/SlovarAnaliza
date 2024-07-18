@@ -1,6 +1,6 @@
 from bs4 import BeautifulSoup
 import requests
-import re  #'#'#'##'#'#'#'#'#'#'#'#'#'##'#'#'#'#'#'#'#''##'#'#
+import re
 import os
 import csv
 import time ##############################################
@@ -72,6 +72,7 @@ def html_to_parquet(mapa, html, file):
 
 
 def dict_to_csv(slovar,  mapa, file, način="w", naslov=True): ##################################################
+    print("shranjevanje v csv...")
     pot = os.path.join( mapa, file)
     if not os.path.exists(pot): #to bom leahko asneje spremenila#################################################
         naslov = True
@@ -103,68 +104,12 @@ def podatki_to_csv( mapa, file, od, do, t1=None, t2= None): ####################
 
 # pridobi_type_funkcije_____________________________________________________________________________________________
 def regexanje2(tekst):
-    print("Regexanje...")
-    soup = BeautifulSoup(tekst, "html5lib") #poglej si kaj naredi "html5lib"
-    seznam = []
-    tabela = soup.find_all("div", attrs={"class":"entry-content"}) #najde posamezeo besedo njej pripradajoče stvari 
-    
-    for odstavek in tabela:
-        slovar = {}
-        #pridobivanje_stvari____________________________________________________________________________________
-        slovar["ime"] = odstavek.a.text
-        
-        #oblika_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
-        listek = set()
-        for span in odstavek.find_all("span", attrs={"title":"Oblika"}):
-            
-            for c in odstavek.find("span", attrs={"title":"Oblika"}).text.replace(u"\xa0", u"").split():
-                listek.add(c)
-        slovar["oblika"] = listek
-        
-        #besedne_vrste_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-
-        def pomozna_definicija(tag):
-            vrste = ["samostalnik", "pridevnik", "glagol", "veznik", "členek", "prislov", "medmet"] #######################################
-            if not tag.has_attr("title"):
-                return False
-            for vrsta in vrste:
-                if vrsta in tag["title"]:
-                    return True
-            return False
-        
-        if odstavek.find(pomozna_definicija) != None:
-            slovar["vrsta"] = odstavek.find(pomozna_definicija)["title"]
-        else:
-            if odstavek.find(attrs={"title":"Razlaga"}) != None and "pridevnik od" in odstavek.find(attrs={"title":"Razlaga"}).text:
-                slovar["vrsta"] = "pridevnik"
-            else:
-                slovar["vrsta"] = None
-        
-        #izgovor_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-
-        listek = set()
-        for span in odstavek.find_all(attrs={"title":"Izgovor"}):
-            listek.add(span.text)
-        slovar["izgovor"] = listek
-        
-        #tonemski_naglas_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-
-        listek = set()
-        for span in odstavek.find_all(attrs={"title":"Tonemski naglas"}):
-            listek.add(span.text)
-        slovar["tonemski naglas"] = listek
-        
-        seznam.append(slovar)
-        
-    return seznam
-
-
-
-def regexanje(tekst):
+    print("regexanje...")
     
     #stvari_ki_jih_iščem:
     re_ime = r'<span class="font_xlarge"><a href.*?>(?P<ime>.+?)</a'
-    # re_oblika = r'(?>title="Oblika" data-group="header">(?P<oblika>.+?)</span>.*?){0,1}'
     re_vrsta = r'span data-group="header qualifier"><span class="color_lightdark font_small" data-toggle="tooltip" data-placement="top" title="(?P<vrsta>samostalnik ženskega spola|samostalnik moškega spola|samostalnik srednjega spola|medemet|predlog|predpona|členek|dovršni glagol|nedovršni glagol|dovršni in nedovršni glagol|pridevnik|prislov|zaimek|števnik|veznik)"'
-    # re_tonemski_naglas = r'(?>title="Tonemski naglas" data-group="header">(?P<tonemski_naglas>.*?)</span>){0,1}<'
 
     vzorec = ".*?".join((re_ime, re_vrsta))
-
+    print("urejanje zadetkov...")
     return [m.groupdict() for m in re.finditer(vzorec, tekst, re.DOTALL)]
