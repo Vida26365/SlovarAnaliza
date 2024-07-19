@@ -5,7 +5,7 @@ from spremenljivke import *
 
 def obstaja(mapa, datoteka):
     for file in os.listdir(mapa):
-        if "."+datoteka in file:
+        if datoteka in file:
             return True
     return False
 
@@ -18,8 +18,8 @@ def main(downlovdaj=False, pocsvjaj=False, od=prva_stran, do=zadnja_stran, mapa_
     #pridobivanje_podatkov____________________________________________________________________________________________________
 
     #html_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_   
-    if downlovdaj or not obstaja(mapa_slovar, "html"):
-        for i in range(od, do+1):
+    if downlovdaj or not obstaja(mapa_slovar, ".html"):
+        for i in range(od, do+1, delitelj):
             pot_html = os.path.join(mapa_slovar, html(i))
             if os.path.exists(pot_html):
                 os.remove(pot_html)
@@ -29,16 +29,19 @@ def main(downlovdaj=False, pocsvjaj=False, od=prva_stran, do=zadnja_stran, mapa_
         t1 = None
     
     #csv_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-
-    if pocsvjaj or not obstaja(mapa_slovar, "csv"):
+    if pocsvjaj or not obstaja(mapa_slovar, "besede.csv"):
+        pot_csv = os.path.join(mapa_slovar, csv)
+        if os.path.exists(pot_csv):
+            os.remove(pot_csv)
         t2 = html_to_csv(mapa_slovar, html, csv, od, do)
     else:
-        print("datoteka csv že obstaja")
+        print("Datoteka csv že obstaja")
         t2 = None
     
     #ostali podatki_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
     podatki_to_csv(mapa_hitrosti, file_hitrosti, od, do, t1, t2)
 
-    print("končano")
+    print("Končano")
 
 #klicanje main__________________________________________________________________________________________________
 if __name__ == '__main__':
