@@ -1,4 +1,3 @@
-from bs4 import BeautifulSoup
 import requests
 import re
 import os
@@ -10,6 +9,30 @@ import pandas as pd
 # to_funkcije___________________________________________________________________________________________________
 
 # html_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-
+def vse_strani_to_html(od, do, url, mapa, file): #url je funkcija
+    zač = time.time()#########################################################33
+    print("v procesu pridobivanja html-ja...")
+    
+    žalostni_list = []
+    print("stran", od)
+    # žalostni_list += url_to_file(url(od), mapa, file(od), "w") #prva stran je posebna, ker mora prva stran začeti pisati datoteko od začetka, namesto dodajati, kot to delajo naslednje strani
+    for i in range(od, do+1):
+        način = "a"
+        print("stran", i)
+        žalostni_list += url_to_file(url(i), mapa, file(i), "a") ######### ne sme biti vedno append
+    print(žalostni_list)
+    i = 0
+    while žalostni_list != []: #poskrbi da so vse strani shranjene v datoteki
+        url_to_file(žalostni_list[0], mapa, file(do), "w")
+        žalostni_list = žalostni_list[1::]
+        if i > 1000:
+            print("na žalost nismo mogli pridobiti sledečih linkov:")
+            for link in žalostni_list:
+                print(link)
+        i += 1
+    return time.time()-zač################################################33
+
+
 def url_to_file(url,  mapa, file, način = "a"):
     try:
         headers = {"User-agent":"Chrome/124.0.6367.207"}
@@ -29,27 +52,8 @@ def url_to_file(url,  mapa, file, način = "a"):
         return [url]
     return []
 
-def file_to_string(mapa, file):
-    pot = os.path.join(mapa, file)
-    with open(pot, "r", encoding="utf-8") as file:
-        text = file.read()
-    return text
 
-def vse_strani_to_html(od, do, url, mapa, file): #url je funkcija
-    zač = time.time()#########################################################33
-    print("v procesu pridobivanja html-ja...")
-    
-    žalostni_list = []
-    print("stran", od)
-    žalostni_list += url_to_file(url(od), mapa, file(od), "w") #prva stran je posebna, ker mora prva stran začeti pisati datoteko od začetka, namesto dodajati, kot to delajo naslednje strani
-    for i in range(od+1, do+1):
-        način = "a"
-        print("stran", i)
-        žalostni_list += url_to_file(url(i), mapa, file(i), "a")
-    print(žalostni_list)
-    while žalostni_list != []: #poskrbi da so vse strani shranjene v datoteki
-        url_to_file(žalostni_list[0], mapa, file(do), "w")
-    return time.time()-zač################################################33
+
 
 # csv_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
 def html_to_csv(mapa, html, csv, od, do):
@@ -62,16 +66,12 @@ def html_to_csv(mapa, html, csv, od, do):
         dict_to_csv(regexanje(tekst), mapa, csv, "w")
     return time.time()-zač ######################################3333
 
-def html_to_parquet(mapa, html, file):
-    zač = time.time()####################################
-    print("v procesu pridobivanja posatkov iz htmlja v parquet...")
-    tekst = file_to_string(mapa, html)
-    df = pd.DataFrame.from_dict(regexanje(tekst))
-    os.makedirs(mapa, exist_ok=True)
-    pot = os.path.join(mapa, file)
-    df.to_parquet(pot)
-    return time.time()-zač ######################################3333
 
+def file_to_string(mapa, file):
+    pot = os.path.join(mapa, file)
+    with open(pot, "r", encoding="utf-8") as file:
+        text = file.read()
+    return text
 
 
 def dict_to_csv(slovar,  mapa, file, način="w", naslov=True): ##################################################
