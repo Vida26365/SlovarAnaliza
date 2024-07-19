@@ -16,4 +16,4 @@ Za uporabo programa potrebujete
 Program vsebuje naslednje datoteke:
 * `main.py` datoteka, ki poskrbi, da se pridobivanje podatkov lahko izvede
 * `pridobivanje_podatkov.py` datoteka, v kateri so shranjene posamezne funkcije, ki jih uporabimo v datoteki `main.py`
-* `spremenljivke.py` 
+* `spremenljivke.py` datoteka v kateri so shranjene spremenljivke, da so na enem mestu
