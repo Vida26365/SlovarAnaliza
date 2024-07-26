@@ -10,7 +10,7 @@ def obstaja(mapa, datoteka):
     return False
 
 
-def main(downlovdaj=False, pocsvjaj=False, od=prva_stran, do=zadnja_stran, mapa_slovar=cel_slovar):
+def main(downlovdaj=False, pocsvjaj=False, od=prva_stran, do=zadnja_stran, mapa_slovar=mapa_slovar):
     if do > 4884:
         do = 4884
     if od < 1:
@@ -45,5 +45,5 @@ def main(downlovdaj=False, pocsvjaj=False, od=prva_stran, do=zadnja_stran, mapa_
 
 #klicanje main__________________________________________________________________________________________________
 if __name__ == '__main__':
-    main(False, True, mapa_slovar=mapa_slovar)
+    main()
 
