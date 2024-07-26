@@ -2,7 +2,7 @@
 
 # Program za analiziranje besed iz Slovarja Slovenskega knjižnjega jezika 2.
 
-POZOR! Program potrebuje zelo dolgo časa da ridobi pridovbljene podatke iz interneta (predvideno ###). Zato sem dodala možnost uporabe že pridobljenih podatkov (v mapi `cel_slovar`). Več o tem v datoteki `analiza.ipynb`.
+POZOR! Program potrebuje zelo dolgo časa da ridobi pridovbljene podatke iz interneta (predvideno 5 ur). Zato sem dodala možnost uporabe že pridobljenih podatkov (v mapi `cel_slovar`). Več o tem v datoteki `analiza.ipynb`.
 
 ## Kaj potrebujete za uporabo programa?
 Za uporabo programa potrebujete 

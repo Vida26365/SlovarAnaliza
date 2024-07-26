@@ -1,5 +1,4 @@
 import pandas as pd
-import os
 #spremenljive_spremenljivke_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
 prva_stran = 1
 zadnja_stran = 4884 #vključno z    (do 4884)
@@ -12,8 +11,8 @@ delitelj = 100
 mapa_slovar = "slovar"
 html = lambda n: f"html{n}.html"
 csv = "besede.csv"
-parquet = "parquet.parquet"
-mapa_stalni_slovar = "stalni_slovar"
+
+cel_slovar = "cel_slovar"
 
 
 mapa_hitrosti = "program" #posebna mapa, ker se ta ne briše ###################################3333
