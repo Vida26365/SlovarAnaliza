@@ -4,6 +4,7 @@ import os
 import csv
 import time ##############################################
 import pandas as pd
+from spremenljivke import delitelj
 
 
 # to_funkcije___________________________________________________________________________________________________
@@ -15,18 +16,17 @@ def vse_strani_to_html(od, do, url, mapa, file): #_-/_-/_-/_-/_-/_-/_-/_-/_-/_-/
     print("v procesu pridobivanja html-ja...")
     
     žalostni_list = []
-    # print("stran", od)
-    # žalostni_list += url_to_file(url(od), mapa, file(od), "w") 
+
     for i in range(od, do+1):
         način = "a"
         print("stran", i)
-        žalostni_list += url_to_file(url(i), mapa, file(i), "a")
+        žalostni_list += url_to_file(url(i), mapa, file(i//delitelj), "a")
         
-    print(žalostni_list)
+    # print(žalostni_list) ##################33
     
     i = 0
     while žalostni_list != []: #poskrbi da so vse strani shranjene v datoteki
-        url_to_file(žalostni_list[0], mapa, file(do), "w")
+        url_to_file(žalostni_list[0], mapa, file(do//delitelj), "a")
         žalostni_list = žalostni_list[1::]
         if i > 1000:
             print("na žalost nismo mogli pridobiti sledečih linkov:")
@@ -43,7 +43,7 @@ def url_to_file(url,  mapa, file, način = "a"): #_-/_-/_-/_-/_-/_-/_-/_-/_-/_-/
         vsebina = requests.get(url, headers=headers)
     except requests.exceptions.RequestException:
         print (f"spletna {url} stran ni dosegljiva")
-        return None
+        return [url]
     
     tekst = vsebina.text
     
@@ -69,10 +69,12 @@ def html_to_csv(mapa, html, csv, od, do): #_-/_-/_-/_-/_-/_-/_-/_-/_-/_-/_-/_-/_
     print("v procesu pridobivanja posatkov iz htmlja v csv...")
     print("regexanje...")
     
-    for i in range(od, do+1, delitelj):
-        print(f"{(i-do)//delitelj}/{(do+1-do)//delitelj}")
-        tekst = file_to_string(mapa, html(i))
-        dict_to_csv(regexanje(tekst), mapa, csv)
+    tekst = ""
+    for file in os.listdir(mapa):
+        if file.endswith(".html"):
+            print(file)
+            tekst += file_to_string(mapa, file)
+    dict_to_csv(regexanje(tekst), mapa, csv)
         
     return time.time()-zač ######################################3333
 
@@ -86,12 +88,12 @@ def file_to_string(mapa, file): #_-/_-/_-/_-/_-/_-/_-/_-/_-/_-/_-/_-/_-/_-/_-/_-
 
 ##################################
 def dict_to_csv(slovar,  mapa, file): #_-/_-/_-/_-/_-/_-/_-/_-/_-/_-/_-/_-/_-/_-/_-/_-/_
-    pot = os.path.join( mapa, file)
+    pot = os.path.join(mapa, file)
     os.makedirs(mapa, exist_ok=True)
     
     oznake = list(slovar[0].keys())
     
-    with open(pot, "a", encoding="utf-8") as file:
+    with open(pot, "w", encoding="utf-8") as file:
         pisatelj = csv.DictWriter(file, fieldnames=oznake)
         pisatelj.writeheader()
         for stvar in slovar:
@@ -105,15 +107,15 @@ def podatki_to_dict(t1, t2, od, do): #_-/_-/_-/_-/_-/_-/_-/_-/_-/_-/_-/_-/_-/_-/
         html_hitrost = None
     else:
         html_hitrost = št/t1
-    if t2 == None:
-        csv_hitrost = None
+    if t2 == None or t2 == 0:
+        csv_hitrost = "zelo hitro"
     else:
         csv_hitrost = št/t2
     return [{"čas_html":t1, "čas_csv":t2, "strani": št, "html_hitrost":html_hitrost, "csv_hitrost":csv_hitrost}]
 
 def podatki_to_csv(mapa, file, od, do, t1=None, t2= None): #_-/_-/_-/_-/_-/_-/_-/_-/_-/_-/_-/_-/_-/_-/_-/_-/_-/_
     slovar = podatki_to_dict(t1, t2, od, do)
-    dict_to_csv(slovar,  mapa, file, "a", naslov=False)
+    dict_to_csv(slovar,  mapa, file)
 
 
 
