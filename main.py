@@ -10,7 +10,7 @@ def obstaja(mapa, datoteka):
     return False
 
 
-def main(downlovdaj=False, pocsvjaj=False, od=prva_stran, do=zadnja_stran, mapa_slovar=mapa_slovar):
+def main(downlovdaj=False, pocsvjaj=False, od=prva_stran, do=zadnja_stran, mapa_slovar=cel_slovar):
     if do > 4884:
         do = 4884
     if od < 1:
@@ -19,8 +19,8 @@ def main(downlovdaj=False, pocsvjaj=False, od=prva_stran, do=zadnja_stran, mapa_
 
     #html_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_   
     if downlovdaj or not obstaja(mapa_slovar, ".html"):
-        for i in range(od, do+1, delitelj):
-            pot_html = os.path.join(mapa_slovar, html(i))
+        for i in range(0, 49):
+            pot_html = os.path.join(mapa_slovar, html(i//delitelj))
             if os.path.exists(pot_html):
                 os.remove(pot_html)
         t1 = vse_strani_to_html(od, do, url, mapa_slovar, html)
@@ -39,11 +39,11 @@ def main(downlovdaj=False, pocsvjaj=False, od=prva_stran, do=zadnja_stran, mapa_
         t2 = None
     
     #ostali podatki_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
-    podatki_to_csv(mapa_hitrosti, file_hitrosti, od, do, t1, t2)
+    # podatki_to_csv(mapa_hitrosti, file_hitrosti, od, do, t1, t2)
 
     print("Končano")
 
 #klicanje main__________________________________________________________________________________________________
 if __name__ == '__main__':
-    main(True, True)
+    main(False, True, mapa_slovar=mapa_slovar)
 
