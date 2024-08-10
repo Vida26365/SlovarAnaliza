@@ -5,6 +5,7 @@ import csv
 import time ##############################################
 import pandas as pd
 from spremenljivke import delitelj
+from bs4 import BeautifulSoup
 
 
 # to_funkcije___________________________________________________________________________________________________
@@ -121,29 +122,19 @@ def podatki_to_csv(mapa, file, od, do, t1=None, t2= None): #_-/_-/_-/_-/_-/_-/_-
 
 
 # pridobi_type_funkcije_________________________________________________________________________________________
-
-def regexanje2(tekst): #_-/_-/_-/_-/_-/_-/_-/_-/_-/_-/_-/_-/_-/_-/_-/_-/_-/_-/_-/_-/_-/_-/_-/_-/_-/_-/_-/_-/_-/_-
-    
-    #stvari_ki_jih_iščem:
-    re_ime = r'<span class="font_xlarge"><a href.*?>(?P<ime>.+?)</a'
-    re_vrsta = r'span data-group="header qualifier"><span class="color_lightdark font_small" data-toggle="tooltip" data-placement="top" title="(?P<vrsta>samostalnik ženskega spola|samostalnik moškega spola|samostalnik srednjega spola|medemet|predlog|predpona|členek|dovršni glagol|nedovršni glagol|dovršni in nedovršni glagol|pridevnik|prislov|zaimek|števnik|veznik)'
-
-    vzorec = ".*?".join((re_ime, re_vrsta))
-    print([m.groupdict() for m in re.finditer(vzorec, tekst, re.DOTALL)])
-    return [m.groupdict() for m in re.finditer(vzorec, tekst, re.DOTALL)]
-
 def regexanje(tekst):
-    re_celica = r'<span class="font_xlarge">(.*?)</span></span>'
-    
-    #stvari_ki_jih_iščem:
     re_ime = r'<a href.*?>(?P<ime>.+?)</a'
     re_vrsta = r'span data-group="header qualifier"><span class="color_lightdark font_small" data-toggle="tooltip" data-placement="top" title="(?P<vrsta>samostalnik ženskega spola|samostalnik moškega spola|samostalnik srednjega spola|medemet|predlog|predpona|členek|dovršni glagol|nedovršni glagol|dovršni in nedovršni glagol|nedovršni in dovršni glagol|pridevnik|prislov|zaimek|števnik|veznik)'
 
+
+    soup = BeautifulSoup(tekst, 'html5lib') #<div class="entry-content">
+    
     seznam = []
-    for celica in re.findall(re_celica, tekst, re.DOTALL):
+    for celica in soup.findAll('div', attrs={"class":"entry-content"}):
+        # celica = re.compile(celica)
         slovar = {}
-        slovar["ime"] = re.findall(re_ime, celica, re.DOTALL)[0]
-        vrsta = re.findall(re_vrsta, celica, re.DOTALL)
+        slovar["ime"] = re.findall(re_ime, str(celica), re.DOTALL)[0]
+        vrsta = re.findall(re_vrsta, str(celica), re.DOTALL)
         if vrsta == []:
             slovar["vrsta"] = None
         else:
@@ -152,4 +143,3 @@ def regexanje(tekst):
     print(seznam)
     print(len(seznam))
     return seznam
-    
