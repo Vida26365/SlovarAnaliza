@@ -98,9 +98,9 @@ def dict_to_csv(slovar,  mapa, file): #_-/_-/_-/_-/_-/_-/_-/_-/_-/_-/_-/_-/_-/_-
 # pridobi_type_funkcije_________________________________________________________________________________________
 def regexanje(tekst):
     re_ime = r'<a href.*?>(?P<ime>.+?)</a'
-    re_vrsta = r'span data-group="header qualifier"><span class="color_lightdark font_small" data-toggle="tooltip" data-placement="top" title="(?P<vrsta>samostalnik ženskega spola|samostalnik moškega spola|samostalnik srednjega spola|medemet|predlog|predpona|členek|dovršni glagol|nedovršni glagol|dovršni in nedovršni glagol|nedovršni in dovršni glagol|pridevnik|prislov|zaimek|števnik|veznik)'
+    re_vrsta = r'title="(?P<vrsta>samostalnik ženskega spola|samostalnik moškega spola|samostalnik srednjega spola|medemet|predlog|predpona|členek|dovršni glagol|nedovršni glagol|dovršni in nedovršni glagol|nedovršni in dovršni glagol|pridevnik|prislov|zaimek|števnik|veznik)'
 
-
+#span data-group="header qualifier"><span class="color_lightdark font_small" data-toggle="tooltip" data-placement="top" 
     soup = BeautifulSoup(tekst, 'html5lib')
     
     seznam = []
@@ -110,7 +110,7 @@ def regexanje(tekst):
         slovar["ime"] = re.findall(re_ime, str(celica), re.DOTALL)[0]
         vrsta = re.findall(re_vrsta, str(celica), re.DOTALL)
         if vrsta == []:
-            slovar["vrsta"] = None
+            slovar["vrsta"] = "neznano"
         else:
             slovar["vrsta"] = vrsta[0]
         seznam.append(slovar)

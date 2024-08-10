@@ -24,4 +24,4 @@ url = lambda n: f"https://www.fran.si/iskanje?page={n}&View=1&Query=*&All=*&Filt
 
 #dodatno________________________________________________________________________________________________________
 abeceda = "abcčdefghijklmnoprsštuvzž"
-besedne_vrste = ["samostalnik", "zaimek", "števnik", "pridevnik", "prislov", "glagol", "členek", "veznik", "medmet"]
+besedne_vrste = ["samostalnik", "zaimek", "števnik", "pridevnik", "prislov", "glagol", "členek", "veznik", "medmet", "neznano"]
