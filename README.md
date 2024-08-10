@@ -9,8 +9,11 @@ Za uporabo programa potrebujete
 1. Dostop do interneta
 2. Naslednje python knjižnjice:
     * pandas
-    * jupyter ###
-    * ###
+    * jupyter
+    * requests
+    * html5lib
+    * bs4
+
 
 # Kaj vsebuje program?
 Program vsebuje naslednje datoteke:
