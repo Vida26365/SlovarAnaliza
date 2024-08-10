@@ -4,6 +4,7 @@ from spremenljivke import *
 
 
 def obstaja(mapa, datoteka):
+    os.makedirs(mapa, exist_ok=True)
     for file in os.listdir(mapa):
         if datoteka in file:
             return True
@@ -45,5 +46,5 @@ def main(downlovdaj=False, pocsvjaj=False, od=prva_stran, do=zadnja_stran, mapa_
 
 #klicanje main__________________________________________________________________________________________________
 if __name__ == '__main__':
-    main()
+    main(True, True, od=1, do=10)
 
