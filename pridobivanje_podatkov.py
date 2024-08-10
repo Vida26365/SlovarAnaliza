@@ -47,14 +47,14 @@ def url_to_file(url,  mapa, file, način = "a"): #_-/_-/_-/_-/_-/_-/_-/_-/_-/_-/
     
     tekst = vsebina.text
     
-    os.makedirs(mapa, exist_ok=True)
+    # os.makedirs(mapa, exist_ok=True)
     pot = os.path.join(mapa, file)
     
     try:
         with open(pot, način, encoding="utf-8") as file:
             file.write(tekst)
     except PermissionError:
-        print("wop wop")
+        print("wop wop") ############################33
         return [url]
     
     return []
@@ -89,7 +89,7 @@ def file_to_string(mapa, file): #_-/_-/_-/_-/_-/_-/_-/_-/_-/_-/_-/_-/_-/_-/_-/_-
 ##################################
 def dict_to_csv(slovar,  mapa, file): #_-/_-/_-/_-/_-/_-/_-/_-/_-/_-/_-/_-/_-/_-/_-/_-/_
     pot = os.path.join(mapa, file)
-    os.makedirs(mapa, exist_ok=True)
+    #os.makedirs(mapa, exist_ok=True)
     
     oznake = list(slovar[0].keys())
     
@@ -122,11 +122,34 @@ def podatki_to_csv(mapa, file, od, do, t1=None, t2= None): #_-/_-/_-/_-/_-/_-/_-
 
 # pridobi_type_funkcije_________________________________________________________________________________________
 
-def regexanje(tekst): #_-/_-/_-/_-/_-/_-/_-/_-/_-/_-/_-/_-/_-/_-/_-/_-/_-/_-/_-/_-/_-/_-/_-/_-/_-/_-/_-/_-/_-/_-
+def regexanje2(tekst): #_-/_-/_-/_-/_-/_-/_-/_-/_-/_-/_-/_-/_-/_-/_-/_-/_-/_-/_-/_-/_-/_-/_-/_-/_-/_-/_-/_-/_-/_-
     
     #stvari_ki_jih_iščem:
     re_ime = r'<span class="font_xlarge"><a href.*?>(?P<ime>.+?)</a'
     re_vrsta = r'span data-group="header qualifier"><span class="color_lightdark font_small" data-toggle="tooltip" data-placement="top" title="(?P<vrsta>samostalnik ženskega spola|samostalnik moškega spola|samostalnik srednjega spola|medemet|predlog|predpona|členek|dovršni glagol|nedovršni glagol|dovršni in nedovršni glagol|pridevnik|prislov|zaimek|števnik|veznik)'
 
     vzorec = ".*?".join((re_ime, re_vrsta))
+    print([m.groupdict() for m in re.finditer(vzorec, tekst, re.DOTALL)])
     return [m.groupdict() for m in re.finditer(vzorec, tekst, re.DOTALL)]
+
+def regexanje(tekst):
+    re_celica = r'<span class="font_xlarge">(.*?)</span></span>'
+    
+    #stvari_ki_jih_iščem:
+    re_ime = r'<a href.*?>(?P<ime>.+?)</a'
+    re_vrsta = r'span data-group="header qualifier"><span class="color_lightdark font_small" data-toggle="tooltip" data-placement="top" title="(?P<vrsta>samostalnik ženskega spola|samostalnik moškega spola|samostalnik srednjega spola|medemet|predlog|predpona|členek|dovršni glagol|nedovršni glagol|dovršni in nedovršni glagol|nedovršni in dovršni glagol|pridevnik|prislov|zaimek|števnik|veznik)'
+
+    seznam = []
+    for celica in re.findall(re_celica, tekst, re.DOTALL):
+        slovar = {}
+        slovar["ime"] = re.findall(re_ime, celica, re.DOTALL)[0]
+        vrsta = re.findall(re_vrsta, celica, re.DOTALL)
+        if vrsta == []:
+            slovar["vrsta"] = None
+        else:
+            slovar["vrsta"] = vrsta[0]
+        seznam.append(slovar)
+    print(seznam)
+    print(len(seznam))
+    return seznam
+    
