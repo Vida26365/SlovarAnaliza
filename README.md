@@ -6,11 +6,11 @@ POZOR! Program potrebuje zelo dolgo časa da ridobi pridovbljene podatke iz inte
 Za uporabo programa potrebujete 
 1. Dostop do interneta
 2. Naslednje python knjižnjice:
-    * pandas
-    * jupyter
     * requests
-    * html5lib
+    * pandas
     * bs4
+    * matplotlib
+    * html5lib
 
 
 ## Kaj vsebuje program in zakaj?
