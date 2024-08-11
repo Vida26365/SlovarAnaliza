@@ -14,10 +14,6 @@ csv = "besede.csv"
 
 cel_slovar = "cel_slovar"
 
-
-mapa_hitrosti = "program" #posebna mapa, ker se ta ne briše ###################################3333
-file_hitrosti = "podatki.csv"##########################################
-
 url = lambda n: f"https://www.fran.si/iskanje?page={n}&View=1&Query=*&All=*&FilteredDictionaryIds=133" 
 
 
