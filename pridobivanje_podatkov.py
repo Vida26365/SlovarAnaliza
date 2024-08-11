@@ -105,7 +105,6 @@ def regexanje(tekst):
     
     seznam = []
     for celica in soup.findAll('div', attrs={"class":"entry-content"}):
-        # celica = re.compile(celica)
         slovar = {}
         slovar["ime"] = re.findall(re_ime, str(celica), re.DOTALL)[0]
         vrsta = re.findall(re_vrsta, str(celica), re.DOTALL)
