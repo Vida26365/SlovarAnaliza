@@ -100,7 +100,7 @@ def regexanje(tekst):
     re_ime = r'<a href.*?>(?P<ime>.+?)</a'
     re_vrsta = r'title="(?P<vrsta>samostalnik ženskega spola|samostalnik moškega spola|samostalnik srednjega spola|medmet|predlog|predpona|členek|dovršni glagol|nedovršni glagol|dovršni in nedovršni glagol|nedovršni in dovršni glagol|pridevnik|prislov|zaimek|števnik|veznik)'
 
-#span data-group="header qualifier"><span class="color_lightdark font_small" data-toggle="tooltip" data-placement="top" 
+ 
     soup = BeautifulSoup(tekst, 'html5lib')
     
     seznam = []

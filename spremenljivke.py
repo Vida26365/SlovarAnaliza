@@ -1,4 +1,3 @@
-import pandas as pd
 #spremenljive_spremenljivke_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
 prva_stran = 1
 zadnja_stran = 4884 #vključno z    (do 4884)
